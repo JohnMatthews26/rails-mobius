@@ -1,5 +1,6 @@
 <ul class="users-list">
-  <% @users.each do |user| %>
+
+  <% @users.sort.each do |user| %>
 
     <% if current_user.email == user.email  %>
       <% next  %>
