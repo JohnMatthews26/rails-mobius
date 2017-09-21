@@ -1,7 +1,15 @@
 class SessionsController < ApplicationController
+
+  def new
+    if logged_in?
+      redirect_to "/users"
+    end
+  end
+  
   def create
+
     @user = User.find_by_credentials(params[:user][:email], params[:user][:password])
-    if @user
+    if @user || logged_in?
       login!(@user)
       redirect_to "/users"
     else
