@@ -19,6 +19,18 @@ class User < ApplicationRecord
     BCrypt::Password.new(self.password_digest).is_password?(password)
   end
 
+  def add_tokens(amount)
+    self.credits += amount
+    self.save
+    self.credits
+  end
+
+  def remove_tokens(amount)
+    self.credits -= amount
+    self.save
+    self.credits
+  end
+
   def self.find_by_credentials(email, password)
     user = User.find_by_email(email)
     return nil if user.nil?

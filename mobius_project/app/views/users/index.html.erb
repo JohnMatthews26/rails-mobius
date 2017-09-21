@@ -1,5 +1,19 @@
-<div>
+<ul class="users-list">
   <% @users.each do |user| %>
-  <%= user.email %>
+
+    <% if current_user.email == user.email  %>
+      <% next  %>
+    <%else  %>
+    <li class="users-item">
+    <%= user.email %>
+    <form class="" action="<%=transactions_url%>" method="post">
+      <%=auth_token%>
+      <input type="text" name="transaction[amount]" value="">
+      <input type="submit" name="" value="Send Credits">
+      <input type="hidden" name="transaction[receiver_id]" value="<%= user.id %>" display="none">
+    </form>
+    </li>
+    <% end %>
+
   <% end %>
-</div>
+</ul>

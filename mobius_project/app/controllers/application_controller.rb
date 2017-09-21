@@ -1,12 +1,18 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :logged_in?
+  helper_method :current_user, :logged_in?, :transaction_process
 
   private
 
   def logged_in?
     !current_user.nil?
+  end
+
+  def transaction_process(receiver_id, amount)
+    current_user.remove_tokens(amount)
+    user = User.find(receiver_id)
+    user.add_tokens(amount)
   end
 
   def logout!
