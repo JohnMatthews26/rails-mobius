@@ -3,6 +3,9 @@ class User < ApplicationRecord
   validates :session_token, presence: true
   validates :password_digest, presence: true
   validates :password, length: { minimum: 6, allow_nil: true }
+  has_many :sent_payments, class_name: :Transaction, foreign_key: "sender_id"
+  has_many :received_payments, class_name: :Transaction, foreign_key: "receiver_id"
+
   after_initialize :ensure_session_token
 
   attr_reader :password
