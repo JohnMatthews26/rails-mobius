@@ -12,6 +12,7 @@ class ApplicationController < ActionController::Base
   def transaction_process(receiver_id, amount)
     current_user.remove_tokens(amount)
     user = User.find(receiver_id)
+    user.lock!
     user.add_tokens(amount)
   end
 
