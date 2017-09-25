@@ -2,15 +2,15 @@ class TransactionsController < ApplicationController
 
 
   def create
+
     @transaction = Transaction.new(transaction_params)
     @transaction.sender_id = current_user.id
     current_user.lock!
-    if @transaction.amount > current_user.credits
+    if @transaction.amount > current_user_balance
       render(
         json: ["Not enough credits."]
         )
     elsif @transaction.save
-        transaction_process(@transaction.receiver_id, @transaction.amount)
         redirect_to "/users"
     else
       render(

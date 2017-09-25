@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
-  helper_method :current_user, :logged_in?, :transaction_process
+  helper_method :current_user, :logged_in?, :current_user_balance
 
   private
 
@@ -9,11 +9,11 @@ class ApplicationController < ActionController::Base
     !current_user.nil?
   end
 
-  def transaction_process(receiver_id, amount)
-    current_user.remove_tokens(amount)
-    user = User.find(receiver_id)
-    user.lock!
-    user.add_tokens(amount)
+  def current_user_balance
+    debits = Transaction.where(sender_id: current_user.id).reduce(0) {|acc, el| acc += el.amount}
+    credits = Transaction.where(receiver_id: current_user.id).reduce(0) {|acc, el| acc += el.amount}
+    balance = 100 + credits - debits
+    return balance
   end
 
   def logout!
